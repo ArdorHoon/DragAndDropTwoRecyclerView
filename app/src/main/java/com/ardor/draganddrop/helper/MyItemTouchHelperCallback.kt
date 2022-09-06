@@ -1,6 +1,7 @@
 package com.ardor.draganddrop.helper
 
 import android.graphics.Canvas
+import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView

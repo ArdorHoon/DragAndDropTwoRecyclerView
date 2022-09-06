@@ -1,5 +1,6 @@
 package com.ardor.draganddrop.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -39,19 +40,6 @@ class SampleAdapter(
         holder.bind(getItem(position))
     }
 
-    companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<String>() {
-            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-                return oldItem == newItem
-            }
-
-        }
-    }
-
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         val list = currentList.toMutableList()
         Collections.swap(list, fromPosition, toPosition)
@@ -63,5 +51,18 @@ class SampleAdapter(
         val list = currentList.toMutableList()
         list.removeAt(position)
         submitList(list)
+    }
+
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<String>() {
+            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+                return oldItem == newItem
+            }
+
+        }
     }
 }
