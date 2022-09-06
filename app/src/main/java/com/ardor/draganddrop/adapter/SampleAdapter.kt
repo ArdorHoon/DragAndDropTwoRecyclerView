@@ -1,11 +1,8 @@
 package com.ardor.draganddrop.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.DragStartHelper
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ardor.draganddrop.databinding.CardItemBinding
@@ -14,7 +11,7 @@ import com.ardor.draganddrop.helper.OnStartDragListener
 import java.util.*
 
 class SampleAdapter(
-    private val listener: OnStartDragListener
+    private val listener: OnStartDragListener?
 ) : ListAdapter<String, SampleAdapter.ViewHolder>(diffUtil), ItemTouchHelperAdapter {
 
     inner class ViewHolder(val binding: CardItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -22,7 +19,7 @@ class SampleAdapter(
             binding.title.text = text
             binding.number.text = "${adapterPosition + 1}"
             binding.item.setOnLongClickListener {
-                listener.onStartDrag(this)
+                listener?.onStartDrag(this)
                 false
             }
         }
