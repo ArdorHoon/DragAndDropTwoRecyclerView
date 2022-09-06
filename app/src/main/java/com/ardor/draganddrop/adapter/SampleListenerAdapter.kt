@@ -1,27 +1,28 @@
 package com.ardor.draganddrop.adapter
 
+import android.annotation.SuppressLint
+import android.content.ClipData
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ardor.draganddrop.databinding.CardItemBinding
-import com.ardor.draganddrop.helper.ItemTouchHelperAdapter
-import com.ardor.draganddrop.helper.OnStartDragListener
-import java.util.*
+import android.view.View.DragShadowBuilder
+import com.ardor.draganddrop.listener.DragListener
 
-class SampleAdapter(
-    private val listener: OnStartDragListener?
-) : ListAdapter<String, SampleAdapter.ViewHolder>(diffUtil), ItemTouchHelperAdapter {
+class SampleListenerAdapter(
+) : ListAdapter<String, SampleListenerAdapter.ViewHolder>(diffUtil), View.OnTouchListener {
 
     inner class ViewHolder(val binding: CardItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(text: String) {
+            binding.root.tag = adapterPosition
             binding.title.text = text
             binding.number.text = "${adapterPosition + 1}"
-            binding.item.setOnLongClickListener {
-                listener?.onStartDrag(this)
-                false
-            }
+            binding.root.setOnTouchListener(this@SampleListenerAdapter)
+            binding.root.setOnDragListener(DragListener())
         }
     }
 
@@ -35,22 +36,20 @@ class SampleAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: SampleAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SampleListenerAdapter.ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        val list = currentList.toMutableList()
-        Collections.swap(list, fromPosition, toPosition)
-        submitList(list)
-        return true
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            val data = ClipData.newPlainText("", "")
+            val shadowBuilder = DragShadowBuilder(view)
+            view?.startDragAndDrop(data, shadowBuilder, view,0)
+        }
+        return false
     }
 
-    override fun onItemDismiss(position: Int) {
-        val list = currentList.toMutableList()
-        list.removeAt(position)
-        submitList(list)
-    }
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<String>() {
@@ -64,4 +63,6 @@ class SampleAdapter(
 
         }
     }
+
+
 }

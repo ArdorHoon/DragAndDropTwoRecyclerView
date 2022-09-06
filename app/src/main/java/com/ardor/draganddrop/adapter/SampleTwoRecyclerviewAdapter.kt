@@ -10,12 +10,13 @@ import com.ardor.draganddrop.helper.ItemTouchHelperAdapter
 import com.ardor.draganddrop.helper.OnStartDragListener
 import java.util.*
 
-class SampleAdapter(
+class SampleTwoRecyclerviewAdapter(
     private val listener: OnStartDragListener?
-) : ListAdapter<String, SampleAdapter.ViewHolder>(diffUtil), ItemTouchHelperAdapter {
+): ListAdapter<String, SampleTwoRecyclerviewAdapter.ViewHolder>(diffUtil), ItemTouchHelperAdapter {
 
     inner class ViewHolder(val binding: CardItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(text: String) {
+            binding.root.tag = adapterPosition
             binding.title.text = text
             binding.number.text = "${adapterPosition + 1}"
             binding.item.setOnLongClickListener {
@@ -35,7 +36,7 @@ class SampleAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: SampleAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SampleTwoRecyclerviewAdapter.ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
