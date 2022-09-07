@@ -16,9 +16,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
-            data="@{viewmodel.data}"
+            item="@{viewmodel.data}"
+            block="@{true}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/card_item" />
+            tools:listitem="@layout/red_card_item" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

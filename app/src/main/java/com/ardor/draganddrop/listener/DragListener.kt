@@ -1,66 +1,78 @@
 package com.ardor.draganddrop.listener
 
+import android.util.Log
 import android.view.DragEvent
 import android.view.View
-import android.view.View.OnDragListener
 import androidx.recyclerview.widget.RecyclerView
 import com.ardor.draganddrop.R
-import com.ardor.draganddrop.adapter.SampleListenerAdapter
+import com.ardor.draganddrop.adapter.SampleDragAdapter
 
-class DragListener() : OnDragListener {
+
+class DragListener(private val block: Boolean) : View.OnDragListener {
     private var isDropped = false
+
     override fun onDrag(view: View, event: DragEvent): Boolean {
+
+        val topViewId = R.id.front_recycler_view
+        val bottomViewId = R.id.behind_recycler_view
+
+        val viewSource = event.localState as View
+        val targetRecyclerView: RecyclerView = view.parent as RecyclerView
+        val sourceRecyclerView: RecyclerView = viewSource.parent as RecyclerView
+
+
         if (event.action == DragEvent.ACTION_DROP) {
             isDropped = true
-            var positionTarget = -1
-            val viewSource = event.localState as View
-            val viewId = view.id
-            val cvItem: Int = R.id.item
-            val rvTop: Int = R.id.front_recycler_view
-            val rvBottom: Int = R.id.behind_recycler_view
-            when (viewId) {
-                cvItem, rvTop, rvBottom -> {
-                    val target: RecyclerView
-                    when (viewId) {
-                        rvTop -> target =
-                            view.rootView.findViewById<View>(rvTop) as RecyclerView
-                        rvBottom -> target =
-                            view.rootView.findViewById<View>(rvBottom) as RecyclerView
-                        else -> {
-                            target = view.parent as RecyclerView
-                            positionTarget = view.tag as Int
-                        }
-                    }
-                    val source = viewSource.parent as RecyclerView
-                    val adapterSource: SampleListenerAdapter? = source.adapter as SampleListenerAdapter?
-                    val positionSource = viewSource.tag as Int
-                    val sourceId = source.id
+            var targetPosition = -1
+            targetPosition = view.tag as Int
 
-                    val list: String? = adapterSource?.let { it.currentList[positionSource]}
-                    val listSource: MutableList<String> = arrayListOf()
-                    adapterSource?.currentList?.let { listSource.addAll(it) }
-                    listSource.removeAt(positionSource)
-                    adapterSource?.submitList(listSource)
 
-                    //타겟
-                    val adapterTarget: SampleListenerAdapter? = target.adapter as SampleListenerAdapter?
-                    val customListTarget: MutableList<String> = arrayListOf()
-                    adapterTarget?.currentList?.let { customListTarget.addAll(it) }
+            if ((!block && targetRecyclerView.id != sourceRecyclerView.id) || block) {
+                //롱클릭 한 아이템의 리사이클러뷰
+                val sourceAdapter: SampleDragAdapter? =
+                    sourceRecyclerView.adapter as SampleDragAdapter?
+                val sourcePosition = viewSource.tag as Int
+                val item: String? = sourceAdapter?.currentList?.get(sourcePosition)
+                val sourceList: MutableList<String> = arrayListOf()
+                sourceAdapter?.currentList?.let { sourceList.addAll(it) }
+                sourceList.removeAt(sourcePosition)
+                sourceAdapter?.submitList(sourceList)
 
-                    val nList : String = list.toString()
-                    if (positionTarget >= 0) {
-                        customListTarget.add(positionTarget, nList)
-                    } else {
-                        customListTarget.add(nList)
-                    }
 
-                    adapterTarget?.submitList(customListTarget)
+                //옮기려는 아이템의 리사이클러뷰
+                val targetAdapter: SampleDragAdapter? =
+                    targetRecyclerView.adapter as SampleDragAdapter?
+                val targetList: MutableList<String> = arrayListOf()
+                targetAdapter?.currentList?.let { targetList.addAll(it) }
+                if (targetPosition >= 0) {
+                    targetList.add(targetPosition, item.toString())
+                } else {
+                    targetList.add(item.toString())
                 }
+                targetAdapter?.submitList(targetList)
+
             }
         }
         if (!isDropped && event.localState != null) {
-            (event.localState as View).visibility = View.VISIBLE
+
+            val cardView = event.localState as View
+
+            when ((cardView.parent as RecyclerView).id) {
+                topViewId -> {
+                    Log.d("testing", "topView")
+                    Log.d("testing", "${targetRecyclerView.id} target")
+                    Log.d("testing", "${sourceRecyclerView.id} source")
+                }
+
+                bottomViewId -> {
+                    Log.d("testing", "bottomView")
+                    Log.d("testing", "${targetRecyclerView.id} target")
+                    Log.d("testing", "${sourceRecyclerView.id} source")
+                }
+            }
+
         }
+
         return true
     }
 }

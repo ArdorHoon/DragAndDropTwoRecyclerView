@@ -17,11 +17,6 @@ class TwoRecyclerViewActivity : AppCompatActivity() {
         "Three",
         "Four",
         "Five",
-        "Six",
-        "Seven",
-        "Eight",
-        "Nine",
-        "Ten",
     )
 
     private val data2: List<String> = listOf(

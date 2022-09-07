@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.view.View" />
+
     </data>
 
     <androidx.cardview.widget.CardView
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/number"
                 android:layout_alignParentBottom="true"
-                android:background="#1976D2"
+                android:background="#9B111E"
                 android:gravity="center_horizontal"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"

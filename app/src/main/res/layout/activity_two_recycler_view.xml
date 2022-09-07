@@ -27,6 +27,7 @@
             android:layout_marginTop="20dp"
             android:id="@+id/behind_recycler_view"
             item="@{viewmodel.data}"
+            block="@{false}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
