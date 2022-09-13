@@ -1,21 +1,19 @@
 package com.ardor.draganddrop.adapter
 
 import android.content.ClipData
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ardor.draganddrop.databinding.CardItemBinding
+import com.ardor.draganddrop.databinding.RedCardItemBinding
 import com.ardor.draganddrop.listener.DragListener
 import com.ardor.draganddrop.model.SimpleModel
 
-class SampleDragAdapter() :
-    ListAdapter<SimpleModel, SampleDragAdapter.ViewHolder>(diffUtil) {
+class SampleDrag2Adapter : ListAdapter<SimpleModel, SampleDrag2Adapter.ViewHolder>(diffUtil) {
 
-    inner class ViewHolder(private val binding: CardItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: RedCardItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(text: SimpleModel) {
             binding.title.text = text.name
             binding.number.text = adapterPosition.toString()
@@ -33,10 +31,9 @@ class SampleDragAdapter() :
     }
 
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SampleDragAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SampleDrag2Adapter.ViewHolder {
         return ViewHolder(
-            CardItemBinding.inflate(
+            RedCardItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -44,7 +41,7 @@ class SampleDragAdapter() :
         )
     }
 
-    override fun onBindViewHolder(holder: SampleDragAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SampleDrag2Adapter.ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

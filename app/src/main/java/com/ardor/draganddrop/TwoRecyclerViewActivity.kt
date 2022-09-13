@@ -5,23 +5,24 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.ardor.draganddrop.databinding.ActivityTwoRecyclerViewBinding
+import com.ardor.draganddrop.model.SimpleModel
 import com.ardor.draganddrop.viewmodel.SampleViewModel
 
 class TwoRecyclerViewActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityTwoRecyclerViewBinding
     private val viewModel : SampleViewModel by viewModels()
-    private val data: List<String> = listOf(
-        "One",
-        "Two",
-        "Three",
-        "Four",
-        "Five",
+    private val data: List<SimpleModel> = listOf(
+        SimpleModel("One"),
+        SimpleModel("Two"),
+        SimpleModel("Three"),
+        SimpleModel("Four"),
+        SimpleModel("Five"),
     )
 
-    private val data2: List<String> = listOf(
-        "One",
-        "Two",
+    private val data2: List<SimpleModel> = listOf(
+        SimpleModel("One", true),
+        SimpleModel("Two", true),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

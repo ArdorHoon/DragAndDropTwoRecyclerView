@@ -17,7 +17,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/front_recycler_view"
             android:layout_width="match_parent"
-            item="@{viewmodel.data2}"
+            data="@{viewmodel.data2}"
             android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,6 @@
             android:layout_marginTop="20dp"
             android:id="@+id/behind_recycler_view"
             item="@{viewmodel.data}"
-            block="@{false}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
