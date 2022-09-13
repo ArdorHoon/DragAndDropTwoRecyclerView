@@ -1,50 +1,45 @@
 package com.ardor.draganddrop.listener
 
-import android.annotation.SuppressLint
+import android.util.Log
 import android.view.DragEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.ardor.draganddrop.R
 import com.ardor.draganddrop.adapter.SampleDrag2Adapter
 import com.ardor.draganddrop.adapter.SampleDragAdapter
 import com.ardor.draganddrop.model.SimpleModel
 import java.util.*
 
-
 class DragListener(
-    private val topMaxSize: Int = 0,
-    private val bottomMaxSize: Int = 0
+    private val listener: CustomListener,
+    private val topId: Int,
+    private val bottomId: Int,
 ) : View.OnDragListener {
     private var isDropped = false
 
-    @SuppressLint("ResourceAsColor")
     override fun onDrag(view: View, event: DragEvent): Boolean {
 
         val viewSource = event.localState as View
         val targetRecyclerView: RecyclerView
         val sourceRecyclerView: RecyclerView = viewSource.parent as RecyclerView
 
-        val topId = R.id.front_recycler_view
-        val bottomId = R.id.behind_recycler_view
-
         if (event.action == DragEvent.ACTION_DROP) {
+            //초기화
             isDropped = true
             val viewId = view.id
             var targetPosition = -1
 
-            when(viewId){
-                topId ->{
+            when (viewId) {
+                topId -> {
                     targetRecyclerView = view.rootView.findViewById(topId) as RecyclerView
                 }
-                bottomId->{
+                bottomId -> {
                     targetRecyclerView = view.rootView.findViewById(bottomId) as RecyclerView
                 }
-                else ->{
+                else -> {
                     targetRecyclerView = view.parent as RecyclerView
                     targetPosition = targetRecyclerView.getChildAdapterPosition(view)
                 }
             }
-
 
             val sourceAdapter =
                 if (sourceRecyclerView.adapter is SampleDragAdapter) sourceRecyclerView.adapter as SampleDragAdapter? else sourceRecyclerView.adapter as SampleDrag2Adapter?
@@ -55,48 +50,83 @@ class DragListener(
 
             //같은 Recyclerview에서 동작
             if (targetRecyclerView.id == sourceRecyclerView.id) {
-                val list: MutableList<SimpleModel> = arrayListOf()
+
+                val list: MutableList<SimpleModel?> = arrayListOf()
                 sourceAdapter?.currentList?.let { list.addAll(it) }
 
-                if (targetPosition >= 0) {
-                    Collections.swap(list, sourcePosition, targetPosition)
-                } else {
-                    Collections.swap(list, sourcePosition, list.size - 1)
-                }
+                if (targetAdapter is SampleDrag2Adapter) {
 
-                sourceAdapter?.submitList(list)
+                    if (targetPosition >= 0 && list[targetPosition] != null) {
+                        if (targetPosition >= 0) {
+                            Collections.swap(list, sourcePosition, targetPosition)
+                        } else {
+                            Collections.swap(list, sourcePosition, list.size - 1)
+                        }
+                    }
+                } else {
+
+                    if (targetPosition >= 0) {
+                        Collections.swap(list, sourcePosition, targetPosition)
+                    } else {
+                        Collections.swap(list, sourcePosition, list.size - 1)
+                    }
+                }
+                if (sourceAdapter is SampleDrag2Adapter) {
+                    listener.setTopData(list)
+                } else {
+                    listener.setBottomData(list)
+                }
             } else {
+                if (targetAdapter is SampleDrag2Adapter) {
+                    if (targetPosition >= 0 && targetPosition < (listener.getMaxSize() ?: 0)) {
+                        //롱클릭 한 아이템의 리사이클러뷰
+                        val item: SimpleModel? = sourceAdapter?.currentList?.get(sourcePosition)
+                        val sourceList: MutableList<SimpleModel?> = arrayListOf()
+                        sourceAdapter?.currentList?.let { sourceList.addAll(it) }
+                        sourceList.removeAt(sourcePosition)
+                        listener.setBottomData(sourceList)
 
+                        val targetList: MutableList<SimpleModel?> = arrayListOf()
+                        targetAdapter.currentList.let { targetList.addAll(it) }
 
-
-                //롱클릭 한 아이템의 리사이클러뷰
-                val item: SimpleModel? = sourceAdapter?.currentList?.get(sourcePosition)
-                val sourceList: MutableList<SimpleModel> = arrayListOf()
-                sourceAdapter?.currentList?.let { sourceList.addAll(it) }
-                sourceList.removeAt(sourcePosition)
-                sourceAdapter?.submitList(sourceList)
-
-                //옮기려는 아이템의 리사이클러뷰
-                val targetList: MutableList<SimpleModel> = arrayListOf()
-                targetAdapter?.currentList?.let { targetList.addAll(it) }
-                if (targetPosition >= 0) {
-                    if (item != null) {
-                        targetList.add(targetPosition, item)
+                        if (item != null) {
+                            if (targetList[targetPosition] == null) {
+                                targetList[targetPosition] = item
+                            } else {
+                                val temp = targetList[targetPosition]
+                                sourceList.add(temp)
+                                sourceAdapter.submitList(sourceList)
+                                targetList[targetPosition] = item
+                            }
+                        }
+                        listener.setTopData(targetList)
                     }
                 } else {
-                    if (item != null) {
-                        targetList.add(item)
+                    //롱클릭 한 아이템의 리사이클러뷰
+                    val item: SimpleModel? = sourceAdapter?.currentList?.get(sourcePosition)
+                    val sourceList: MutableList<SimpleModel?> = arrayListOf()
+                    sourceAdapter?.currentList?.let { sourceList.addAll(it) }
+                    sourceList.removeAt(sourcePosition)
+                    sourceList.add(sourcePosition, null)
+                    listener.setTopData(sourceList)
+
+                    //옮기려는 아이템의 리사이클러뷰
+                    val targetList: MutableList<SimpleModel?> = arrayListOf()
+                    targetAdapter?.currentList?.let { targetList.addAll(it) }
+                    if (targetPosition >= 0) {
+                        if (item != null) {
+                            targetList.add(targetPosition, item)
+                        }
+                    } else {
+                        if (item != null) {
+                            targetList.add(item)
+                        }
                     }
+                    listener.setBottomData(targetList)
                 }
-                targetAdapter?.submitList(targetList)
             }
+            return true
         }
-        if (!isDropped && event.localState != null) {
-
-            val cardView = event.localState as View
-
-        }
-
         return true
     }
 }
