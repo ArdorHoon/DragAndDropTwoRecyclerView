@@ -9,7 +9,6 @@ import com.ardor.draganddrop.listener.DragListener
 import com.ardor.draganddrop.model.SimpleModel
 
 object CommonBindingAdapter {
-
     @BindingAdapter(
         value = ["item", "listener"]
     )

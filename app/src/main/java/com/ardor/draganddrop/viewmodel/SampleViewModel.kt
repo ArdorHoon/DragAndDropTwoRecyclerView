@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.ardor.draganddrop.model.SimpleModel
 
 class SampleViewModel : ViewModel() {
-
     private val _bottomData: MutableLiveData<List<SimpleModel?>> = MutableLiveData()
     val bottomData: LiveData<List<SimpleModel?>> = _bottomData
 

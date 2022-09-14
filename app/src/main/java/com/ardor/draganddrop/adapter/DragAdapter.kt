@@ -63,7 +63,6 @@ class DragAdapter(private val dragListener: DragListener) :
         parent: ViewGroup,
         viewType: Int
     ): RecyclerView.ViewHolder {
-
         return when (viewType) {
             EMPTY_TYPE -> {
                 EmptyViewHolder(
@@ -110,7 +109,6 @@ class DragAdapter(private val dragListener: DragListener) :
     }
 
     companion object {
-
         private const val BLUE_TYPE = 0
         private const val RED_TYPE = 1
         private const val EMPTY_TYPE = 2

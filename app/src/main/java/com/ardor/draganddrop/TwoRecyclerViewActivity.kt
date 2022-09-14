@@ -10,7 +10,6 @@ import com.ardor.draganddrop.model.SimpleModel
 import com.ardor.draganddrop.viewmodel.SampleViewModel
 
 class TwoRecyclerViewActivity : AppCompatActivity(), CustomListener {
-
     lateinit var binding: ActivityTwoRecyclerViewBinding
     private val viewModel: SampleViewModel by viewModels()
     private val data: List<SimpleModel> = listOf(

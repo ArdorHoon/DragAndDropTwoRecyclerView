@@ -12,7 +12,6 @@ abstract class DragListener(
     private val topId: Int,
     private val bottomId: Int,
 ) : View.OnDragListener {
-
     abstract val topMaxItemCount: Int
     abstract val bottomMaxItemCount: Int
 
