@@ -5,11 +5,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.ardor.draganddrop.databinding.ActivityTwoRecyclerViewBinding
-import com.ardor.draganddrop.listener.CustomListener
+import com.ardor.draganddrop.listener.ItemModifyListener
 import com.ardor.draganddrop.model.SimpleModel
 import com.ardor.draganddrop.viewmodel.SampleViewModel
 
-class TwoRecyclerViewActivity : AppCompatActivity(), CustomListener {
+class TwoRecyclerViewActivity : AppCompatActivity(), ItemModifyListener {
     lateinit var binding: ActivityTwoRecyclerViewBinding
     private val viewModel: SampleViewModel by viewModels()
     private val data: List<SimpleModel> = listOf(

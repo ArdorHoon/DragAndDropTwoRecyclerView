@@ -8,7 +8,7 @@ import com.ardor.draganddrop.model.SimpleModel
 import java.util.*
 
 abstract class DragListener(
-    private val listener: CustomListener,
+    private val listener: ItemModifyListener,
     private val topId: Int,
     private val bottomId: Int,
 ) : View.OnDragListener {

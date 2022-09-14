@@ -4,7 +4,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardor.draganddrop.adapter.DragAdapter
-import com.ardor.draganddrop.listener.CustomListener
+import com.ardor.draganddrop.listener.ItemModifyListener
 import com.ardor.draganddrop.listener.DragListener
 import com.ardor.draganddrop.model.SimpleModel
 
@@ -16,7 +16,7 @@ object CommonBindingAdapter {
     fun bindDragRecyclerview(
         view: RecyclerView,
         data: List<SimpleModel?>?,
-        listener: CustomListener
+        listener: ItemModifyListener
     ) {
         val dragListener: DragListener =
             object : DragListener(
