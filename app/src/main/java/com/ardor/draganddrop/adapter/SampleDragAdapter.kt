@@ -20,7 +20,6 @@ class SampleDragAdapter(private val listener: CustomListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(text: SimpleModel) {
             binding.title.text = text.name
-            //Set Drag and Drop
             binding.root.setOnLongClickListener { view ->
                 val data = ClipData.newPlainText("", "")
                 val shadowBuilder = View.DragShadowBuilder(view)
@@ -30,8 +29,8 @@ class SampleDragAdapter(private val listener: CustomListener) :
             binding.item.setOnDragListener(
                 DragListener(
                     listener,
-                    R.id.front_recycler_view,
-                    R.id.behind_recycler_view
+                    R.id.top_recycler_view,
+                    R.id.bottom_recycler_view
                 )
             )
         }
@@ -63,7 +62,6 @@ class SampleDragAdapter(private val listener: CustomListener) :
             override fun areContentsTheSame(oldItem: SimpleModel, newItem: SimpleModel): Boolean {
                 return oldItem == newItem
             }
-
         }
     }
 }

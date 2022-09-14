@@ -14,7 +14,7 @@ object CommonBindingAdapter {
         value = ["item", "listener"]
     )
     @JvmStatic
-    fun bindRecyclerView3(
+    fun bindBottomRecyclerView(
         view: RecyclerView,
         data: List<SimpleModel>?,
         listener: CustomListener
@@ -23,8 +23,8 @@ object CommonBindingAdapter {
         view.setOnDragListener(
             DragListener(
                 listener,
-                R.id.front_recycler_view,
-                R.id.behind_recycler_view
+                R.id.top_recycler_view,
+                R.id.bottom_recycler_view
             )
         )
         data.let {
@@ -43,7 +43,7 @@ object CommonBindingAdapter {
         value = ["data", "listener"]
     )
     @JvmStatic
-    fun bindRecyclerView2(
+    fun bindTopRecyclerView(
         view: RecyclerView,
         data: List<SimpleModel?>?,
         listener: CustomListener
@@ -52,8 +52,8 @@ object CommonBindingAdapter {
         view.setOnDragListener(
             DragListener(
                 listener,
-                R.id.front_recycler_view,
-                R.id.behind_recycler_view
+                R.id.top_recycler_view,
+                R.id.bottom_recycler_view
             )
         )
         data.let {

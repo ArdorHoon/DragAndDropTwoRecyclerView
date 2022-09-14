@@ -19,7 +19,7 @@
         tools:context=".TwoRecyclerViewActivity">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/front_recycler_view"
+            android:id="@+id/top_recycler_view"
             android:layout_width="match_parent"
             data="@{viewmodel.data2}"
             listener="@{listener}"
@@ -30,13 +30,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="20dp"
-            android:id="@+id/behind_recycler_view"
+            android:id="@+id/bottom_recycler_view"
             item="@{viewmodel.data}"
             listener="@{listener}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/front_recycler_view" />
+            app:layout_constraintTop_toBottomOf="@+id/top_recycler_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

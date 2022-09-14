@@ -23,7 +23,6 @@ class DragListener(
         val sourceRecyclerView: RecyclerView = viewSource.parent as RecyclerView
 
         if (event.action == DragEvent.ACTION_DROP) {
-            //초기화
             isDropped = true
             val viewId = view.id
             var targetPosition = -1
@@ -48,7 +47,6 @@ class DragListener(
             val targetAdapter =
                 if (targetRecyclerView.adapter is SampleDragAdapter) targetRecyclerView.adapter as SampleDragAdapter? else targetRecyclerView.adapter as SampleDrag2Adapter?
 
-            //같은 Recyclerview에서 동작
             if (targetRecyclerView.id == sourceRecyclerView.id) {
 
                 val list: MutableList<SimpleModel?> = arrayListOf()
@@ -78,8 +76,7 @@ class DragListener(
                 }
             } else {
                 if (targetAdapter is SampleDrag2Adapter) {
-                    if (targetPosition >= 0 && targetPosition < (listener.getMaxSize() ?: 0)) {
-                        //롱클릭 한 아이템의 리사이클러뷰
+                    if (targetPosition >= 0 && targetPosition < listener.getMaxSize()) {
                         val item: SimpleModel? = sourceAdapter?.currentList?.get(sourcePosition)
                         val sourceList: MutableList<SimpleModel?> = arrayListOf()
                         sourceAdapter?.currentList?.let { sourceList.addAll(it) }
@@ -102,7 +99,6 @@ class DragListener(
                         listener.setTopData(targetList)
                     }
                 } else {
-                    //롱클릭 한 아이템의 리사이클러뷰
                     val item: SimpleModel? = sourceAdapter?.currentList?.get(sourcePosition)
                     val sourceList: MutableList<SimpleModel?> = arrayListOf()
                     sourceAdapter?.currentList?.let { sourceList.addAll(it) }
@@ -110,7 +106,6 @@ class DragListener(
                     sourceList.add(sourcePosition, null)
                     listener.setTopData(sourceList)
 
-                    //옮기려는 아이템의 리사이클러뷰
                     val targetList: MutableList<SimpleModel?> = arrayListOf()
                     targetAdapter?.currentList?.let { targetList.addAll(it) }
                     if (targetPosition >= 0) {
