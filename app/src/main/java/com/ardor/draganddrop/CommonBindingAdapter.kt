@@ -37,7 +37,7 @@ object CommonBindingAdapter {
             val adapter = view.adapter as? DragAdapter
             adapter?.submitList(data) ?: run {
                 view.layoutManager = GridLayoutManager(view.context, 3)
-                view.adapter = DragAdapter(listener).apply {
+                view.adapter = DragAdapter(dragListener).apply {
                     submitList(data)
                 }
             }

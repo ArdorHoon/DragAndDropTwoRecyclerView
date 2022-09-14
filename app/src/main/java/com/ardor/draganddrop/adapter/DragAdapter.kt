@@ -7,28 +7,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ardor.draganddrop.R
 import com.ardor.draganddrop.databinding.CardItemBinding
 import com.ardor.draganddrop.databinding.EmptyItemBinding
 import com.ardor.draganddrop.databinding.RedCardItemBinding
-import com.ardor.draganddrop.listener.CustomListener
 import com.ardor.draganddrop.listener.DragListener
 import com.ardor.draganddrop.model.SimpleModel
 
-class DragAdapter(private val listener: CustomListener) :
+class DragAdapter(private val dragListener: DragListener) :
     ListAdapter<SimpleModel, RecyclerView.ViewHolder>(diffUtil) {
-
-    val dragListener: DragListener =
-        object : DragListener(
-            listener,
-            R.id.top_recycler_view,
-            R.id.bottom_recycler_view
-        ) {
-            override val topMaxItemCount: Int
-                get() = 3
-            override val bottomMaxItemCount: Int
-                get() = 0
-        }
 
     inner class BlueViewHolder(private val binding: CardItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

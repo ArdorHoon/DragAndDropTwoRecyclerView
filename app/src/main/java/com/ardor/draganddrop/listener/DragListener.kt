@@ -68,7 +68,7 @@ abstract class DragListener(
                     listener.setBottomData(list)
                 }
             } else {
-                if (targetAdapter?.currentList?.any { it.isRed || it == null } == true) {
+                if (targetAdapter?.currentList?.any { it == null } == true || targetAdapter?.currentList?.any { it.isRed } == true) {
                     if (topMaxItemCount != 0 && targetPosition in 0 until topMaxItemCount) {
                         val item: SimpleModel? =
                             sourceAdapter?.currentList?.get(sourcePosition).apply {
