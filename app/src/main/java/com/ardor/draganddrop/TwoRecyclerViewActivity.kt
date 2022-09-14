@@ -1,13 +1,9 @@
 package com.ardor.draganddrop
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.ardor.draganddrop.adapter.SampleDrag2Adapter
-import com.ardor.draganddrop.adapter.SampleDragAdapter
 import com.ardor.draganddrop.databinding.ActivityTwoRecyclerViewBinding
 import com.ardor.draganddrop.listener.CustomListener
 import com.ardor.draganddrop.model.SimpleModel
@@ -33,10 +29,6 @@ class TwoRecyclerViewActivity : AppCompatActivity(), CustomListener {
         binding.listener = this
 
         viewModel.setData(data)
-    }
-
-    override fun getMaxSize(): Int {
-        return 3
     }
 
     override fun setTopData(list: MutableList<SimpleModel?>) {

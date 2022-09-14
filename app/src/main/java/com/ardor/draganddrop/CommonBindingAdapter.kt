@@ -3,64 +3,41 @@ package com.ardor.draganddrop
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ardor.draganddrop.adapter.SampleDrag2Adapter
-import com.ardor.draganddrop.adapter.SampleDragAdapter
+import com.ardor.draganddrop.adapter.DragAdapter
 import com.ardor.draganddrop.listener.CustomListener
 import com.ardor.draganddrop.listener.DragListener
 import com.ardor.draganddrop.model.SimpleModel
 
 object CommonBindingAdapter {
+
     @BindingAdapter(
         value = ["item", "listener"]
     )
     @JvmStatic
-    fun bindBottomRecyclerView(
-        view: RecyclerView,
-        data: List<SimpleModel>?,
-        listener: CustomListener
-    ) {
-        view.setHasFixedSize(true)
-        view.setOnDragListener(
-            DragListener(
-                listener,
-                R.id.top_recycler_view,
-                R.id.bottom_recycler_view
-            )
-        )
-        data.let {
-            val adapter = view.adapter as? SampleDragAdapter
-            adapter?.submitList(data) ?: run {
-                view.layoutManager = GridLayoutManager(view.context, 3)
-                view.adapter = SampleDragAdapter(listener).apply {
-                    submitList(data)
-                }
-            }
-        }
-    }
-
-
-    @BindingAdapter(
-        value = ["data", "listener"]
-    )
-    @JvmStatic
-    fun bindTopRecyclerView(
+    fun bindDragRecyclerview(
         view: RecyclerView,
         data: List<SimpleModel?>?,
         listener: CustomListener
     ) {
-        view.setHasFixedSize(true)
-        view.setOnDragListener(
-            DragListener(
+        val dragListener: DragListener =
+            object : DragListener(
                 listener,
                 R.id.top_recycler_view,
                 R.id.bottom_recycler_view
-            )
-        )
+            ) {
+                override val topMaxItemCount: Int
+                    get() = 3
+                override val bottomMaxItemCount: Int
+                    get() = 0
+            }
+
+        view.setHasFixedSize(true)
+        view.setOnDragListener(dragListener)
         data.let {
-            val adapter = view.adapter as? SampleDrag2Adapter
+            val adapter = view.adapter as? DragAdapter
             adapter?.submitList(data) ?: run {
                 view.layoutManager = GridLayoutManager(view.context, 3)
-                view.adapter = SampleDrag2Adapter(listener).apply {
+                view.adapter = DragAdapter(listener).apply {
                     submitList(data)
                 }
             }

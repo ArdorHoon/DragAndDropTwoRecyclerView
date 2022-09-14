@@ -7,28 +7,28 @@ import com.ardor.draganddrop.model.SimpleModel
 
 class SampleViewModel : ViewModel() {
 
-    private val _data: MutableLiveData<List<SimpleModel?>> = MutableLiveData()
-    val data: LiveData<List<SimpleModel?>> = _data
+    private val _bottomData: MutableLiveData<List<SimpleModel?>> = MutableLiveData()
+    val bottomData: LiveData<List<SimpleModel?>> = _bottomData
 
     var tempData: MutableList<SimpleModel?> =
-        arrayListOf(SimpleModel("one", false), null, null)
+        arrayListOf(SimpleModel("one", true), null, null)
 
-    private val _data2: MutableLiveData<List<SimpleModel?>> = MutableLiveData()
-    val data2: LiveData<List<SimpleModel?>> = _data2
+    private val _topData: MutableLiveData<List<SimpleModel?>> = MutableLiveData()
+    val topData: LiveData<List<SimpleModel?>> = _topData
 
     fun setData(items: List<SimpleModel>) {
-        _data.value = items
+        _bottomData.value = items
     }
 
     fun setTopData(list : MutableList<SimpleModel?>) {
-        _data2.value = list
+        _topData.value = list
     }
 
     fun setBottomData(list : MutableList<SimpleModel?>) {
-        _data.value = list
+        _bottomData.value = list
     }
 
     init {
-        _data2.value = tempData
+        _topData.value = tempData
     }
 }

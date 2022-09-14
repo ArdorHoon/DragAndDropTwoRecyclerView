@@ -1,29 +1,27 @@
 package com.ardor.draganddrop.listener
 
-import android.util.Log
 import android.view.DragEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.ardor.draganddrop.adapter.SampleDrag2Adapter
-import com.ardor.draganddrop.adapter.SampleDragAdapter
+import com.ardor.draganddrop.adapter.DragAdapter
 import com.ardor.draganddrop.model.SimpleModel
 import java.util.*
 
-class DragListener(
+abstract class DragListener(
     private val listener: CustomListener,
     private val topId: Int,
     private val bottomId: Int,
 ) : View.OnDragListener {
-    private var isDropped = false
+
+    abstract val topMaxItemCount: Int
+    abstract val bottomMaxItemCount: Int
 
     override fun onDrag(view: View, event: DragEvent): Boolean {
-
         val viewSource = event.localState as View
         val targetRecyclerView: RecyclerView
         val sourceRecyclerView: RecyclerView = viewSource.parent as RecyclerView
 
         if (event.action == DragEvent.ACTION_DROP) {
-            isDropped = true
             val viewId = view.id
             var targetPosition = -1
 
@@ -40,20 +38,15 @@ class DragListener(
                 }
             }
 
-            val sourceAdapter =
-                if (sourceRecyclerView.adapter is SampleDragAdapter) sourceRecyclerView.adapter as SampleDragAdapter? else sourceRecyclerView.adapter as SampleDrag2Adapter?
+            val sourceAdapter = sourceRecyclerView.adapter as DragAdapter?
             val sourcePosition = sourceRecyclerView.getChildAdapterPosition(viewSource)
-
-            val targetAdapter =
-                if (targetRecyclerView.adapter is SampleDragAdapter) targetRecyclerView.adapter as SampleDragAdapter? else targetRecyclerView.adapter as SampleDrag2Adapter?
+            val targetAdapter = targetRecyclerView.adapter as DragAdapter?
 
             if (targetRecyclerView.id == sourceRecyclerView.id) {
-
                 val list: MutableList<SimpleModel?> = arrayListOf()
                 sourceAdapter?.currentList?.let { list.addAll(it) }
 
-                if (targetAdapter is SampleDrag2Adapter) {
-
+                if (targetAdapter is DragAdapter) {
                     if (targetPosition >= 0 && list[targetPosition] != null) {
                         if (targetPosition >= 0) {
                             Collections.swap(list, sourcePosition, targetPosition)
@@ -62,24 +55,31 @@ class DragListener(
                         }
                     }
                 } else {
-
                     if (targetPosition >= 0) {
                         Collections.swap(list, sourcePosition, targetPosition)
                     } else {
                         Collections.swap(list, sourcePosition, list.size - 1)
                     }
                 }
-                if (sourceAdapter is SampleDrag2Adapter) {
+
+                if (sourceAdapter?.currentList?.any { it.isRed } == true) {
                     listener.setTopData(list)
                 } else {
                     listener.setBottomData(list)
                 }
             } else {
-                if (targetAdapter is SampleDrag2Adapter) {
-                    if (targetPosition >= 0 && targetPosition < listener.getMaxSize()) {
-                        val item: SimpleModel? = sourceAdapter?.currentList?.get(sourcePosition)
+                if (targetAdapter?.currentList?.any { it.isRed || it == null } == true) {
+                    if (topMaxItemCount != 0 && targetPosition in 0 until topMaxItemCount) {
+                        val item: SimpleModel? =
+                            sourceAdapter?.currentList?.get(sourcePosition).apply {
+                                this?.isRed = true
+                            }
                         val sourceList: MutableList<SimpleModel?> = arrayListOf()
-                        sourceAdapter?.currentList?.let { sourceList.addAll(it) }
+                        sourceAdapter?.currentList.let {
+                            if (it != null) {
+                                sourceList.addAll(it)
+                            }
+                        }
                         sourceList.removeAt(sourcePosition)
                         listener.setBottomData(sourceList)
 
@@ -90,9 +90,9 @@ class DragListener(
                             if (targetList[targetPosition] == null) {
                                 targetList[targetPosition] = item
                             } else {
-                                val temp = targetList[targetPosition]
+                                val temp = targetList[targetPosition].apply { this?.isRed = false }
                                 sourceList.add(temp)
-                                sourceAdapter.submitList(sourceList)
+                                sourceAdapter?.submitList(sourceList)
                                 targetList[targetPosition] = item
                             }
                         }
@@ -100,6 +100,7 @@ class DragListener(
                     }
                 } else {
                     val item: SimpleModel? = sourceAdapter?.currentList?.get(sourcePosition)
+                        .apply { this?.isRed = false }
                     val sourceList: MutableList<SimpleModel?> = arrayListOf()
                     sourceAdapter?.currentList?.let { sourceList.addAll(it) }
                     sourceList.removeAt(sourcePosition)
@@ -125,3 +126,4 @@ class DragListener(
         return true
     }
 }
+
