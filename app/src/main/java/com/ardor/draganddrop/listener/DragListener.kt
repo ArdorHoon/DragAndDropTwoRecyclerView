@@ -9,8 +9,8 @@ import java.util.*
 
 abstract class DragListener(
     private val listener: ItemModifyListener,
-    private val topId: Int,
-    private val bottomId: Int,
+    private val topRecyclerviewId: Int,
+    private val bottomRecyclerviewId: Int,
 ) : View.OnDragListener {
     abstract val topMaxItemCount: Int
     abstract val bottomMaxItemCount: Int
@@ -25,11 +25,11 @@ abstract class DragListener(
             var targetPosition = -1
 
             when (viewId) {
-                topId -> {
-                    targetRecyclerView = view.rootView.findViewById(topId) as RecyclerView
+                topRecyclerviewId -> {
+                    targetRecyclerView = view.rootView.findViewById(topRecyclerviewId) as RecyclerView
                 }
-                bottomId -> {
-                    targetRecyclerView = view.rootView.findViewById(bottomId) as RecyclerView
+                bottomRecyclerviewId -> {
+                    targetRecyclerView = view.rootView.findViewById(bottomRecyclerviewId) as RecyclerView
                 }
                 else -> {
                     targetRecyclerView = view.parent as RecyclerView
