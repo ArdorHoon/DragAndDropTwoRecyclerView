@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ardor.draganddrop.databinding.CardItemBinding
 import com.ardor.draganddrop.databinding.EmptyItemBinding
 import com.ardor.draganddrop.databinding.RedCardItemBinding
-import com.ardor.draganddrop.listener.DragListener
 import com.ardor.draganddrop.model.SimpleModel
 
-class DragAdapter(private val dragListener: DragListener) :
-    ListAdapter<SimpleModel, RecyclerView.ViewHolder>(diffUtil) {
+class SimpleAdapter(
+    override val isSwappable: Boolean,
+    private val onAdapterListener: OnAdapterListener
+) : RecyclerViewDragAdapter<SimpleModel, RecyclerView.ViewHolder>(diffUtil) {
 
     inner class BlueViewHolder(private val binding: CardItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -108,7 +108,15 @@ class DragAdapter(private val dragListener: DragListener) :
         }
     }
 
+    interface OnAdapterListener {
+        fun onAdd(itemInfo: SimpleModel)
+        fun onRemove(itemInfo: SimpleModel)
+        fun onSet(index: Int, itemInfo: SimpleModel)
+        fun onSwap(isRed: Boolean, from: Int, to: Int)
+    }
+
     companion object {
+
         private const val BLUE_TYPE = 0
         private const val RED_TYPE = 1
         private const val EMPTY_TYPE = 2
@@ -123,4 +131,25 @@ class DragAdapter(private val dragListener: DragListener) :
             }
         }
     }
+
+    override fun onAdd(item: SimpleModel) {
+       onAdapterListener.onAdd(item)
+    }
+
+    override fun onRemove(item: SimpleModel) {
+       onAdapterListener.onRemove(item)
+    }
+
+    override fun onSet(index: Int, item: SimpleModel) {
+      onAdapterListener.onSet(index, item)
+    }
+
+    override fun onSwap(from: Int, to: Int) {
+       if(currentList.any { it.isRed }){
+           onAdapterListener.onSwap(true, from, to)
+       }else{
+           onAdapterListener.onSwap(false, from, to)
+       }
+    }
+
 }

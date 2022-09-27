@@ -19,11 +19,11 @@ class SampleViewModel : ViewModel() {
         _bottomData.value = items
     }
 
-    fun setTopData(list : MutableList<SimpleModel?>) {
+    fun setTopData(list: MutableList<SimpleModel?>) {
         _topData.value = list
     }
 
-    fun setBottomData(list : MutableList<SimpleModel?>) {
+    fun setBottomData(list: MutableList<SimpleModel?>) {
         _bottomData.value = list
     }
 
