@@ -51,21 +51,12 @@ abstract class RecyclerViewDragAdapter<T, VH : RecyclerView.ViewHolder>(
                         } else {
                             try {
                                 targetAdapter.currentList[targetPosition]?.let {
-                                    if (sourceAdapter.currentList.size < targetPosition) {
-                                        //개수 적은 데에서 많은 데로
-                                        sourceAdapter.onSet(
-                                            sourcePosition,
-                                            targetAdapter.currentList[targetPosition]
-                                        )
-                                    } else {
-                                        //개수 많은 데에서 적은 대로
-                                        targetAdapter.onSet(
-                                            targetPosition,
-                                            sourceAdapter.currentList[sourcePosition]
-                                        )
-                                    }
+                                    sourceAdapter.onSet(
+                                        targetPosition,
+                                        sourcePosition,
+                                        targetAdapter.currentList[targetPosition]
+                                    )
                                 } ?: run {
-                                    //recyclerview에 아이템이 없는 곳에 드래그 앤 드랍
                                     targetAdapter.onAdd(sourceAdapter.currentList[sourcePosition])
                                 }
                             } catch (e: IndexOutOfBoundsException) {
@@ -85,7 +76,7 @@ abstract class RecyclerViewDragAdapter<T, VH : RecyclerView.ViewHolder>(
 
     abstract fun onRemove(item: T)
 
-    abstract fun onSet(index: Int, item: T)
+    abstract fun onSet(targetIndex: Int, sourceIndex: Int, targetItem: T)
 
     abstract fun onSwap(from: Int, to: Int)
 

@@ -3,43 +3,33 @@ package com.ardor.draganddrop
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ardor.draganddrop.adapter.DragAdapter
-import com.ardor.draganddrop.listener.ItemModifyListener
-import com.ardor.draganddrop.listener.DragListener
+import com.ardor.draganddrop.adapter.SimpleAdapter
 import com.ardor.draganddrop.model.SimpleModel
 
 object CommonBindingAdapter {
+
     @BindingAdapter(
-        value = ["item", "listener"]
+        value = ["data", "onAdapterListener", "isSwappable"]
     )
     @JvmStatic
-    fun bindDragRecyclerview(
+    fun bindGeneralDragRecyclerView(
         view: RecyclerView,
-        data: List<SimpleModel?>?,
-        listener: ItemModifyListener
+        data: List<SimpleModel>?,
+        onAdapterListener: SimpleAdapter.OnAdapterListener,
+        isSwappable: Boolean?,
     ) {
-        val dragListener: DragListener =
-            object : DragListener(
-                listener,
-                R.id.top_recycler_view,
-                R.id.bottom_recycler_view
-            ) {
-                override val topMaxItemCount: Int
-                    get() = 3
-                override val bottomMaxItemCount: Int
-                    get() = 0
-            }
-
         view.setHasFixedSize(true)
-        view.setOnDragListener(dragListener)
-        data.let {
-            val adapter = view.adapter as? DragAdapter
-            adapter?.submitList(data) ?: run {
+        data?.let { items ->
+            val adapter = view.adapter as? SimpleAdapter
+            adapter?.submitList(items) ?: run {
                 view.layoutManager = GridLayoutManager(view.context, 3)
-                view.adapter = DragAdapter(dragListener).apply {
-                    submitList(data)
-                }
+                view.adapter =
+                    SimpleAdapter(isSwappable ?: false, onAdapterListener).apply {
+                        submitList(items)
+                        view.setOnDragListener(dragListener)
+                    }
             }
         }
     }
+
 }

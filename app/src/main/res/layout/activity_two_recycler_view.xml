@@ -5,12 +5,13 @@
 
     <data>
         <variable
-            name="listener"
-            type="com.ardor.draganddrop.listener.ItemModifyListener" />
-
-        <variable
             name="viewmodel"
             type="com.ardor.draganddrop.viewmodel.SampleViewModel" />
+
+        <variable
+            name="onAdapterListener"
+            type="com.ardor.draganddrop.adapter.SimpleAdapter.OnAdapterListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,8 +22,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/top_recycler_view"
             android:layout_width="match_parent"
-            item="@{viewmodel.topData}"
-            listener="@{listener}"
+            data="@{viewmodel.topData}"
+            onAdapterListener="@{onAdapterListener}"
+            isSwappable="@{true}"
             android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,8 +33,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="20dp"
             android:id="@+id/bottom_recycler_view"
-            item="@{viewmodel.bottomData}"
-            listener="@{listener}"
+            data="@{viewmodel.bottomData}"
+            onAdapterListener="@{onAdapterListener}"
+            isSwappable="@{true}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -111,7 +111,7 @@ class SimpleAdapter(
     interface OnAdapterListener {
         fun onAdd(itemInfo: SimpleModel)
         fun onRemove(itemInfo: SimpleModel)
-        fun onSet(index: Int, itemInfo: SimpleModel)
+        fun onSet(targetIndex: Int, sourceIndex: Int ,itemInfo: SimpleModel)
         fun onSwap(isRed: Boolean, from: Int, to: Int)
     }
 
@@ -140,9 +140,6 @@ class SimpleAdapter(
        onAdapterListener.onRemove(item)
     }
 
-    override fun onSet(index: Int, item: SimpleModel) {
-      onAdapterListener.onSet(index, item)
-    }
 
     override fun onSwap(from: Int, to: Int) {
        if(currentList.any { it.isRed }){
@@ -150,6 +147,14 @@ class SimpleAdapter(
        }else{
            onAdapterListener.onSwap(false, from, to)
        }
+    }
+
+    override fun onSet(
+        targetIndex: Int,
+        sourceIndex: Int,
+        targetItem: SimpleModel,
+    ) {
+        onAdapterListener.onSet(targetIndex, sourceIndex, targetItem)
     }
 
 }
