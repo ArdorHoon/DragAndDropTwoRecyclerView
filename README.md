@@ -14,9 +14,47 @@ An example of dragging and dropping from one `RecyclerView` into another `Recycl
 
 ## 🎡 Description
 
-🔴 DragListener : abstarct class for handling drag and drop event <br>
-🔴 DragItemModifyListener : interface for handling viewmodel data when occurs drag and drop event
+🔴 RecyclerViewDragAdapter : abstract class for apply drag and drop to some adpater
+- isSwappable : `boolean` for swap item in same Recyclerview
+- onAdapterListener : It is callback listener for handling `viewmodel`, naming is free
 
+
+### 👉 Usage
+
+```kotlin
+class SimpleAdapter(
+    override val isSwappable: Boolean,
+    private val onAdapterListener: OnAdapterListener
+) : RecyclerViewDragAdapter<SimpleModel, RecyclerView.ViewHolder>(diffUtil) {
+    
+    /*.skip..*/
+   
+    override fun onAdd(item: SimpleModel) {
+       onAdapterListener.onAdd(item)
+    }
+
+    override fun onRemove(item: SimpleModel) {
+       onAdapterListener.onRemove(item)
+    }
+
+
+    override fun onSwap(from: Int, to: Int) {
+       if(currentList.any { it.isRed }){
+           onAdapterListener.onSwap(true, from, to)
+       }else{
+           onAdapterListener.onSwap(false, from, to)
+       }
+    }
+
+    override fun onSet(
+        targetIndex: Int,
+        sourceIndex: Int,
+        targetItem: SimpleModel,
+    ) {
+        onAdapterListener.onSet(targetIndex, sourceIndex, targetItem)
+    }
+}
+```
 <br>
 
 ## ☘️License
